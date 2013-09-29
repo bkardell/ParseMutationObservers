@@ -1,25 +1,6 @@
 /* globals RSVP */
 (function (attachTo) {
     "use strict";
-    var fetchTextAndPromise = function(url) {
-        var promise = new attachTo.Promise(function(resolve, reject){
-        var client = new XMLHttpRequest();
-        var handler = function handler() {
-        if (this.readyState === this.DONE) {
-            if (this.status === 200) { resolve(this.response); }
-            else { reject(this); }
-            }
-        };
-        client.open("GET", url);
-        client.onreadystatechange = handler;
-        client.responseType = "text";
-        client.setRequestHeader("Accept", "text");
-        client.send();
-        });
-        return promise;
-    };
-    attachTo.Promise = RSVP.Promise;
-    attachTo.Promise.all = RSVP.all;
     attachTo.ParseMutationObserver = function (filterQuery) {
         var connected,
             eventCallbacks = {},
@@ -30,7 +11,6 @@
             test = function(element) {
                 return element.nodeType === 1 && matches.call(element, filterQuery);
             },
-            MutationObserver = document.MutationObserver || document.WebKitMutationObserver,
             observer = new MutationObserver(function(mutations) {
                 var mutation, buff = [];
                 for (var x = 0;x<mutations.length;x++) {
@@ -92,7 +72,7 @@
             if (connected) {
                self.disconnect(true);
             }
-            attachTo.Promise.all(promises).then(function(){
+            attachTo.ParseMutationObserver.Promise.all(promises).then(function(){
                 var cbs = eventCallbacks.done;
                 var max = (cbs||[]).length;
                 for (var i=0;i<max;i++) {
@@ -101,5 +81,25 @@
             });
         });
     };
-    attachTo.ParseMutationObserver.fetchPromise = fetchTextAndPromise;
+    attachTo.ParseMutationObserver.version = "0.1.0";
+    attachTo.ParseMutationObserver.Promise = RSVP.Promise;
+    attachTo.ParseMutationObserver.Promise.all = RSVP.all;
+    attachTo.ParseMutationObserver.promiseUrl = function(url) {
+        var promise = new attachTo.ParseMutationObserver.Promise(function(resolve, reject){
+        var client = new XMLHttpRequest();
+        var handler = function handler() {
+        if (this.readyState === this.DONE) {
+            if (this.status === 200) { resolve(this.response); }
+            else { reject(this); }
+            }
+        };
+        client.open("GET", url);
+        client.onreadystatechange = handler;
+        client.responseType = "text";
+        client.setRequestHeader("Accept", "text");
+        client.send();
+        });
+
+        return promise;
+    };
 }(window.ProllyfillRoot || window));

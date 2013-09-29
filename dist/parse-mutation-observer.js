@@ -1,4 +1,4 @@
-/*! parse-mutation-observer - v0.1.0 - 2013-09-28
+/*! parse-mutation-observer - v0.1.0 - 2013-09-29
 * Copyright (c) 2013 ; Licensed  */
 (function(globals) {
 var define, requireModule;
@@ -678,27 +678,12 @@ define("rsvp",
   });
 window.RSVP = requireModule("rsvp");
 })(window);
+if (!window.Hitch) {
+	window.Hitch = {};
+}
+window.ProllyfillRoot = window.Hitch;
 (function (attachTo) {
     "use strict";
-    var fetchTextAndPromise = function(url) {
-        var promise = new attachTo.Promise(function(resolve, reject){
-        var client = new XMLHttpRequest();
-        var handler = function handler() {
-        if (this.readyState === this.DONE) {
-            if (this.status === 200) { resolve(this.response); }
-            else { reject(this); }
-            }
-        };
-        client.open("GET", url);
-        client.onreadystatechange = handler;
-        client.responseType = "text";
-        client.setRequestHeader("Accept", "text");
-        client.send();
-        });
-        return promise;
-    };
-    attachTo.Promise = RSVP.Promise;
-    attachTo.Promise.all = RSVP.all;
     attachTo.ParseMutationObserver = function (filterQuery) {
         var connected,
             eventCallbacks = {},
@@ -709,7 +694,6 @@ window.RSVP = requireModule("rsvp");
             test = function(element) {
                 return element.nodeType === 1 && matches.call(element, filterQuery);
             },
-            MutationObserver = document.MutationObserver || document.WebKitMutationObserver,
             observer = new MutationObserver(function(mutations) {
                 var mutation, buff = [];
                 for (var x = 0;x<mutations.length;x++) {
@@ -771,7 +755,7 @@ window.RSVP = requireModule("rsvp");
             if (connected) {
                self.disconnect(true);
             }
-            attachTo.Promise.all(promises).then(function(){
+            attachTo.ParseMutationObserver.Promise.all(promises).then(function(){
                 var cbs = eventCallbacks.done;
                 var max = (cbs||[]).length;
                 for (var i=0;i<max;i++) {
@@ -780,5 +764,25 @@ window.RSVP = requireModule("rsvp");
             });
         });
     };
-    attachTo.ParseMutationObserver.fetchPromise = fetchTextAndPromise;
+    attachTo.ParseMutationObserver.version = "0.1.0";
+    attachTo.ParseMutationObserver.Promise = RSVP.Promise;
+    attachTo.ParseMutationObserver.Promise.all = RSVP.all;
+    attachTo.ParseMutationObserver.promiseUrl = function(url) {
+        var promise = new attachTo.ParseMutationObserver.Promise(function(resolve, reject){
+        var client = new XMLHttpRequest();
+        var handler = function handler() {
+        if (this.readyState === this.DONE) {
+            if (this.status === 200) { resolve(this.response); }
+            else { reject(this); }
+            }
+        };
+        client.open("GET", url);
+        client.onreadystatechange = handler;
+        client.responseType = "text";
+        client.setRequestHeader("Accept", "text");
+        client.send();
+        });
+
+        return promise;
+    };
 }(window.ProllyfillRoot || window));

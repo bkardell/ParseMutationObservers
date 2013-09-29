@@ -20,7 +20,7 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['lib/**/*.js', 'src/*.js'],
+        src: ['lib/**/*.js', 'src/hitcher.js', 'src/ParseMutationObserver.js'],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
