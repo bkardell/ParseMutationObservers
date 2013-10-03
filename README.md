@@ -3,7 +3,7 @@ ParseMutationObservers
 
 A fast/efficient mechanism for watching DOM parse.
 
-In the course of [http://extensiblewebmanifestor.org](extending the web forward), we are encountering situations in which we are filling functionality which will ultimately be handled during the native parse.   Some examples:
+In the course of [extending the web forward](http://extensiblewebmanifesto.org), we are encountering situations in which we are filling functionality which will ultimately be handled during the native parse.   Some examples:
 
 * HTML Imports use `<link>` tags to signal things that need to be downloaded and imported
 * Recently there has been discussion about how you might add preloading, promises, dependency attributes to `<script>` elements (see WHATWG archives) - RequireJS has “data-main” as another example.
