@@ -38,7 +38,7 @@ cssLinksObserver.on('notify', function (elements) {
 `ParseMutationObserver`s also expose a method that can let you know when the initial parse is complete (`DOMContentLoaded`) and, if the notify function returned any `promises`, that those have been fulfilled or rejected as well. 
 
 ```javascript
-var cssLinksObserver = new ParseMutationObserver('link[type="text/css"]');
+var cssLinksObserver = new Hitch.ParseMutationObserver('link[type="text/css"]');
 
 cssLinksObserver.on('notify', function (elements) {
 	// do some work with those elements... 
@@ -62,7 +62,7 @@ returned result, and when all of those things have completed calls a `compile()`
 You could accomplish as:
 
 ```javascript
-var exampleLinksObserver = new ParseMutationObserver('link[type="text/example"]');
+var exampleLinksObserver = new Hitch.ParseMutationObserver('link[type="text/example"]');
 var promiseAndPrecompile = function (url) {
 	return ParseMutationObserver.urlPromise(url).then(function(text) {
 		example.precompile(text);
