@@ -24,6 +24,16 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
+    "concat-prefixed": {
+      options: {
+        banner: '<%= banner %>',
+        stripBanners: true
+      },
+      dist: {
+        src: ['lib/**/*.js', 'src/ParseMutationObserver.js'],
+        dest: 'dist/<%= pkg.name %>.js'
+      }
+    },
     uglify: {
       options: {
         banner: '<%= banner %>'
@@ -71,6 +81,8 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+  grunt.registerTask('prefixed', ['jshint', 'concat-prefixed', 'uglify']);
+  
 
   // TODO: Add the tests....
   //grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);
