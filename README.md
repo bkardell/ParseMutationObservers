@@ -23,12 +23,13 @@ Include this in the `<head>` of your document...
 
 The basic signature looks like this:
 ```javascript
-new ParseMutationObserver(selectorQuery);
+// All my prollyfills wind up on Hitch.* to ensure forward compat... You can build unprefixed/unattached via grunt
+new Hitch.ParseMutationObserver(selectorQuery);
 ```
 
 You can attach a listener to be notified of (an array of buffered elements) discovered during parse by registering for `notify` events via the `on` method:
 ```javascript
-var cssLinksObserver = new ParseMutationObserver('link[type="text/css"]');
+var cssLinksObserver = new Hitch.ParseMutationObserver('link[type="text/css"]');
 
 cssLinksObserver.on('notify', function (elements) {
 	// do some work with those elements... This can also return a promise read below... 
@@ -73,7 +74,7 @@ exampleLinksObserver.on('notify', function (elements) {
 	elements.forEach(function (el) {
 		promises.push(promiseAndPrecompile(el.getAttribute("href")));
 	});
-	return new ParseMutationObserver.Promise.all(promises);
+	return new Hitch.ParseMutationObserver.Promise.all(promises);
 });
 
 exampleLinksObserver.on('done', function () {
