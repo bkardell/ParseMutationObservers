@@ -65,7 +65,7 @@ You could accomplish as:
 ```javascript
 var exampleLinksObserver = new Hitch.ParseMutationObserver('link[type="text/example"]');
 var promiseAndPrecompile = function (url) {
-	return ParseMutationObserver.urlPromise(url).then(function(text) {
+	return Hitch.ParseMutationObserver.urlPromise(url).then(function(text) {
 		example.precompile(text);
 	});
 };
